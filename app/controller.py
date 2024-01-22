@@ -91,7 +91,7 @@ class BotRunner(object):
             if not message.reply_to_message:
                 return await bot.reply_to(
                     message,
-                    text=f"🍡 please reply to spam message with this command ({message.chat.id})",
+                    text=f"🍡 please reply to message with this command ({message.chat.id})",
                 )
             logger.info(f"Report in {message.chat.id} {message.from_user.id}")
             reply_message = message.reply_to_message
