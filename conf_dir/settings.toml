@@ -1,0 +1,6 @@
+[app]
+debug = false
+
+[mode]
+only_white = false
+white_group = []
