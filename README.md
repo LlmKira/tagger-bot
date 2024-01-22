@@ -1,6 +1,6 @@
 # Tagger Bot
 
-![Ruff](https://github.com/TelechaBot/anime-tag-bot/actions/workflows/ruff.yml/badge.svg)
+![Ruff](https://github.com/LlmKira/tagger-bot/actions/workflows/ruff.yml/badge.svg)
 
 > [!IMPORTANT]
 > Deploy With [wd14-tagger-server](https://github.com/LlmKira/wd14-tagger-server)
