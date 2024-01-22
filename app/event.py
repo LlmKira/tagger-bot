@@ -33,7 +33,7 @@ async def pipeline_tag(trace_id, content: Union[IO, TextIOBase]) -> TaggerResult
         character_threshold=0.75,
     )
     content.close()
-    tag_result: str = raw_output_wd["origin_result"]
+    tag_result: str = raw_output_wd["tag_result"]
     character_res: dict = raw_output_wd["character_res"]
     characters = list(character_res.keys())
     logger.info(f"Censored {trace_id},score {anime_score},result {tag_result}")
