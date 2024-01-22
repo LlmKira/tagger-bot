@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "anti-lolicon-bot",
+      "name": "tagger-bot",
       "script": "pdm run python3 main.py",
       "instances": 1,
       "max_restarts": 3,
