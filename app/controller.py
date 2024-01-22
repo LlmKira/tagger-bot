@@ -69,6 +69,19 @@ class BotRunner(object):
             asyncio_helper.proxy = BotSetting.proxy_address
             logger.info("Proxy tunnels are being used!")
 
+        @bot.message_handler(content_types=["photo", "document"], chat_types=["private"])
+        async def start(message: types.Message):
+            if settings.mode.only_white:
+                if message.chat.id not in settings.mode.white_group:
+                    return logger.info(f"White List Out {message.chat.id}")
+            logger.info(f"Report in {message.chat.id} {message.from_user.id}")
+            if message.photo:
+                prompt = await self.tagger(file=message.photo[-1])
+                await bot.reply_to(message, text=prompt, parse_mode="MarkdownV2")
+            if message.document:
+                prompt = await self.tagger(file=message.document)
+                await bot.reply_to(message, text=prompt, parse_mode="MarkdownV2")
+
         @bot.message_handler(commands="tag", chat_types=["supergroup", "group"])
         async def tag(message: types.Message):
             if settings.mode.only_white:
