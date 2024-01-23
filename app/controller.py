@@ -59,6 +59,9 @@ class BotRunner(object):
         with Image.open(BytesIO(raw_file_data)) as img:
             prompt = img.info.get("Description", None)
             title = img.info.get("Title", None)
+            # 删除标题的空格
+            if title:
+                title.replace(" ", "_")
         if prompt:
             content.append(formatting.mcode(prompt))
         if title:
