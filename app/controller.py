@@ -44,17 +44,19 @@ class BotRunner(object):
         return downloaded_file
 
     async def tagger(self, file) -> str:
-        file_data = await self.download(file=file)
-        if file_data is None:
+        raw_file_data = await self.download(file=file)
+        if raw_file_data is None:
             return "🥛 Not An image"
-        if isinstance(file_data, bytes):
-            file_data = BytesIO(file_data)
+        if isinstance(raw_file_data, bytes):
+            file_data = BytesIO(raw_file_data)
+        else:
+            file_data = raw_file_data
         result = await pipeline_tag(trace_id="test", content=file_data)
         content = [
             formatting.mbold(f"🥽 AnimeScore: {result.anime_score}"),
             formatting.mcode(result.anime_tags)
         ]
-        with Image.open(file_data) as img:
+        with Image.open(BytesIO(raw_file_data)) as img:
             prompt = img.info.get("Description", None)
             title = img.info.get("Title", None)
         if prompt:
