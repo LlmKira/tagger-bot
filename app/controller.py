@@ -4,6 +4,7 @@
 # @Software: PyCharm
 from io import BytesIO
 
+from PIL import Image
 from asgiref.sync import sync_to_async
 from loguru import logger
 from telebot import formatting
@@ -53,6 +54,13 @@ class BotRunner(object):
             formatting.mbold(f"🥽 AnimeScore: {result.anime_score}"),
             formatting.mcode(result.anime_tags)
         ]
+        with Image.open(file_data) as img:
+            prompt = img.info.get("Description", None)
+            title = img.info.get("Title", None)
+        if prompt:
+            content.append(formatting.mcode(prompt))
+        if title:
+            content.append(formatting.mbold(f" #{title} "))
         if result.characters:
             content.append(formatting.mbold(f"🌟 Characters: {result.characters}"))
         prompt = formatting.format_text(
