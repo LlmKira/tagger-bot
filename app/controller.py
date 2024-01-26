@@ -7,6 +7,7 @@ from io import BytesIO
 from PIL import Image
 from asgiref.sync import sync_to_async
 from loguru import logger
+from novelai_python.utils.random_prompt import RandomPromptGenerator
 from telebot import formatting
 from telebot import types
 from telebot import util
@@ -94,6 +95,30 @@ class BotRunner(object):
             if message.document:
                 prompt = await self.tagger(file=message.document)
                 await bot.reply_to(message, text=prompt, parse_mode="MarkdownV2")
+
+        @bot.message_handler(commands="nsfw", chat_types=["supergroup", "group", "private"])
+        async def nsfw(message: types.Message):
+            if settings.mode.only_white:
+                if message.chat.id not in settings.mode.white_group:
+                    return logger.info(f"White List Out {message.chat.id}")
+            contents = RandomPromptGenerator(nsfw_enabled=True).generate()
+            prompt = formatting.format_text(
+                formatting.mbold("🥛 NSFW Prompt"),
+                formatting.mcode(content=contents)
+            )
+            return await bot.reply_to(message, text=prompt, parse_mode="MarkdownV2")
+
+        @bot.message_handler(commands="sfw", chat_types=["supergroup", "group", "private"])
+        async def sfw(message: types.Message):
+            if settings.mode.only_white:
+                if message.chat.id not in settings.mode.white_group:
+                    return logger.info(f"White List Out {message.chat.id}")
+            contents = RandomPromptGenerator(nsfw_enabled=False).generate()
+            prompt = formatting.format_text(
+                formatting.mbold("🥛 SFW Prompt"),
+                formatting.mcode(content=contents)
+            )
+            return await bot.reply_to(message, text=prompt, parse_mode="MarkdownV2")
 
         @bot.message_handler(commands="tag", chat_types=["supergroup", "group"])
         async def tag(message: types.Message):

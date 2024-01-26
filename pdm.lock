@@ -5,7 +5,7 @@
 groups = ["default"]
 strategy = ["cross_platform"]
 lock_version = "4.4.1"
-content_hash = "sha256:2b25f5ffc334fde34c80649be8e90efdf7efebd4e2a92edb78e6f1aca0d2ef6f"
+content_hash = "sha256:be90625641e0d905c198ae53494046b31f3d1cfa046fbbbfdc4133f7baae234e"
 
 [[package]]
 name = "aiofiles"
@@ -435,6 +435,23 @@ files = [
     {file = "cryptography-41.0.5-pp39-pypy39_pp73-manylinux_2_28_x86_64.whl", hash = "sha256:fba1e91467c65fe64a82c689dc6cf58151158993b13eb7a7f3f4b7f395636723"},
     {file = "cryptography-41.0.5-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:0d2a6a598847c46e3e321a7aef8af1436f11c27f1254933746304ff014664d84"},
     {file = "cryptography-41.0.5.tar.gz", hash = "sha256:392cb88b597247177172e02da6b7a63deeff1937fa6fec3bbf902ebd75d97ec7"},
+]
+
+[[package]]
+name = "curl-cffi"
+version = "0.5.10"
+requires_python = ">=3.7"
+summary = "libcurl ffi bindings for Python, with impersonation support"
+dependencies = [
+    "cffi>=1.12.0",
+]
+files = [
+    {file = "curl_cffi-0.5.10-cp37-abi3-macosx_10_9_x86_64.whl", hash = "sha256:892603dab5e56fb72bfff7ae969136138971f63f63defe98232e1ec55cb0f1c6"},
+    {file = "curl_cffi-0.5.10-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:9937b8e13b1a6963c63e155b6621ec74649965105efedb919bc226fe731861cc"},
+    {file = "curl_cffi-0.5.10-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:b537595b9610a4dd0927c09823925b4e32b1ce0fd04385bfc5bb72ab830720e6"},
+    {file = "curl_cffi-0.5.10-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1b2bc8822d23415f6533c8b750475e9bbc76764025fe1dcb5866dc033607fd7b"},
+    {file = "curl_cffi-0.5.10-cp37-abi3-win_amd64.whl", hash = "sha256:f9a1874b860c4e8db49bdfd9b9d4dc39999a1397d271ec78624c35c838e9e92a"},
+    {file = "curl_cffi-0.5.10.tar.gz", hash = "sha256:55bac4b73e2d80ceeaabea33270fc8ca6ace594128a46710242f2e688b4f8bfc"},
 ]
 
 [[package]]
@@ -869,6 +886,26 @@ dependencies = [
 files = [
     {file = "nodeenv-1.8.0-py2.py3-none-any.whl", hash = "sha256:df865724bb3c3adc86b3876fa209771517b0cfe596beff01a92700e0e8be4cec"},
     {file = "nodeenv-1.8.0.tar.gz", hash = "sha256:d51e0c37e64fbf47d017feac3145cdbb58836d7eee8c6f6d3b6880c5456227d2"},
+]
+
+[[package]]
+name = "novelai-python"
+version = "0.1.3"
+requires_python = ">=3.8"
+summary = "Novelai Python Binding With Pydantic"
+dependencies = [
+    "Pillow>=10.2.0",
+    "curl-cffi>=0.5.10",
+    "elara>=0.5.5",
+    "httpx>=0.26.0",
+    "loguru>=0.7.2",
+    "pydantic-settings>=2.1.0",
+    "pydantic>=2.5.3",
+    "shortuuid>=1.0.11",
+]
+files = [
+    {file = "novelai_python-0.1.3-py3-none-any.whl", hash = "sha256:8a18e36c0db5bb250013ede1b8691dfcd5d087c53d8bd9dba13c8820bbb1667d"},
+    {file = "novelai_python-0.1.3.tar.gz", hash = "sha256:a2f5eb5da0e0ab67f6a4cb7fe634472e654d72b487ea3a6b77d4a29a58a37193"},
 ]
 
 [[package]]
