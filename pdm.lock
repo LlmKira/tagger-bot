@@ -852,7 +852,7 @@ files = [
 
 [[package]]
 name = "novelai-python"
-version = "0.1.4"
+version = "0.1.5"
 requires_python = ">=3.8"
 summary = "Novelai Python Binding With Pydantic"
 dependencies = [
@@ -866,8 +866,8 @@ dependencies = [
     "shortuuid>=1.0.11",
 ]
 files = [
-    {file = "novelai_python-0.1.4-py3-none-any.whl", hash = "sha256:6b84e99deb03a8c57525e1e22c4d6975bb668c3ecd127efce93e0ba289ffc75e"},
-    {file = "novelai_python-0.1.4.tar.gz", hash = "sha256:f8f4b1824b35630aa3042a4212ee93de9663a21fca563aa506ca3eef9867c975"},
+    {file = "novelai_python-0.1.5-py3-none-any.whl", hash = "sha256:4c9f17a37098b1a33a8f51119baf821d6d3209c02fb230a6a3275e5248426a99"},
+    {file = "novelai_python-0.1.5.tar.gz", hash = "sha256:2e20db23cf9b44dcf82827f3e2367b427d3c41b3894eeecaf0595c971f31136d"},
 ]
 
 [[package]]
