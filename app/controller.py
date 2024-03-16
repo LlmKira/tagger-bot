@@ -72,6 +72,7 @@ class BotRunner(object):
             if meta_data.Comment.reference_strength:
                 mode += f"+VibeTransfer"
             try:
+                file_data.seek(0)
                 is_novelai = meta_data.verify_image_is_novelai(Image.open(file_data))
             except Exception as e:
                 is_novelai = False
