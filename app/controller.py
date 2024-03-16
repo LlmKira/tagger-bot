@@ -7,14 +7,15 @@ from io import BytesIO
 from PIL import Image
 from asgiref.sync import sync_to_async
 from loguru import logger
-from novelai_python.utils.random_prompt import RandomPromptGenerator
+from novelai_python.tool.random_prompt import RandomPromptGenerator
+from novelai_python.tool.image_metadata import ImageMetadata
 from telebot import formatting
 from telebot import types
 from telebot import util
 from telebot.async_telebot import AsyncTeleBot
 from telebot.asyncio_helper import ApiTelegramException
 from telebot.asyncio_storage import StateMemoryStorage
-
+import telegramify_markdown
 from app.event import pipeline_tag
 from app_conf import settings
 from setting.telegrambot import BotSetting
@@ -54,24 +55,40 @@ class BotRunner(object):
             file_data = raw_file_data
         result = await pipeline_tag(trace_id="test", content=file_data)
         content = [
-            formatting.mbold(f"🥽 AnimeScore: {result.anime_score}"),
-            formatting.mcode(result.anime_tags)
+            f"🥽 AnimeScore: {result.anime_score}",
+            f"Infer Tags: `{result.infer_tags}`",
         ]
-        with Image.open(BytesIO(raw_file_data)) as img:
-            prompt = img.info.get("Description", None)
-            title = img.info.get("Title", None)
-            # 删除标题的空格
-            if title:
-                title.replace(" ", "_")
-        if prompt:
-            content.append(formatting.mcode(prompt))
-        if title:
-            content.append(formatting.mbold(f" #{title} "))
+        try:
+            meta_data = ImageMetadata.load_image(file_data)
+            read_prompt = meta_data.Description
+            read_model = meta_data.used_model
+
+            rq_type = meta_data.Comment.request_type
+            mode = ""
+            if rq_type == "PromptGenerateRequest":
+                mode += "Text2Prompt"
+            elif rq_type == "Img2ImgRequest":
+                mode += "Img2Img"
+            if meta_data.Comment.reference_strength:
+                mode += f"+VibeTransfer"
+            try:
+                is_novelai = meta_data.verify_image_is_novelai(Image.open(file_data))
+            except Exception as e:
+                is_novelai = False
+        except Exception as e:
+            logger.exception(e)
+        else:
+            content.append(f"NovelAI Prompt: `{read_prompt}`")
+            if read_model:
+                content.append(f"Model: `{read_model.value}`")
+            if meta_data.Source:
+                content.append(f"Source: `{meta_data.Source}`")
+            if not is_novelai:
+                content.append("Not Signed by NovelAI")
+            content.append(f"Mode: `{mode}`")
         if result.characters:
-            content.append(formatting.mbold(f"🌟 Characters: {result.characters}"))
-        prompt = formatting.format_text(
-            *content
-        )
+            content.append(f"🌟 Characters: `{result.characters}`")
+        prompt = telegramify_markdown.convert("\n".join(content))
         return prompt
 
     async def run(self):
