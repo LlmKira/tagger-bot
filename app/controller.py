@@ -59,6 +59,7 @@ class BotRunner(object):
             f"Infer Tags: `{result.anime_tags}`",
         ]
         try:
+            file_data.seek(0)
             meta_data = ImageMetadata.load_image(file_data)
             read_prompt = meta_data.Description
             read_model = meta_data.used_model
