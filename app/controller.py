@@ -91,6 +91,7 @@ class BotRunner(object):
         if result.characters:
             content.append(f"🌟 Characters: `{result.characters}`")
         prompt = telegramify_markdown.convert("\n".join(content))
+        file_data.close()
         return prompt
 
     async def run(self):
