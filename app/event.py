@@ -32,7 +32,6 @@ async def pipeline_tag(trace_id, content: Union[IO, TextIOBase]) -> TaggerResult
         general_threshold=0.35,
         character_threshold=0.75,
     )
-    content.close()
     tag_result: str = raw_output_wd["tag_result"]
     character_res: dict = raw_output_wd["character_res"]
     characters = list(character_res.keys())
