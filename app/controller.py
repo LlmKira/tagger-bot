@@ -56,7 +56,7 @@ class BotRunner(object):
         result = await pipeline_tag(trace_id="test", content=file_data)
         content = [
             f"🥽 AnimeScore: {result.anime_score}",
-            f"Infer Tags: `{result.infer_tags}`",
+            f"Infer Tags: `{result.anime_tags}`",
         ]
         try:
             meta_data = ImageMetadata.load_image(file_data)
