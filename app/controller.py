@@ -67,7 +67,7 @@ class BotRunner(object):
             rq_type = meta_data.Comment.request_type
             mode = ""
             if rq_type == "PromptGenerateRequest":
-                mode += "Text2Prompt"
+                mode += "Text2Image"
             elif rq_type == "Img2ImgRequest":
                 mode += "Img2Img"
             if meta_data.Comment.reference_strength:
