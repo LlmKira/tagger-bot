@@ -3,7 +3,7 @@
 ![Ruff](https://github.com/LlmKira/tagger-bot/actions/workflows/ruff.yml/badge.svg)
 
 > [!IMPORTANT]
-> Deploy With [wd14-tagger-server](https://github.com/LlmKira/wd14-tagger-server)
+> Deploy With [wd14-tagger-server](https://github.com/LlmKira/wd14-tagger-server) Newest Version.
 
 ## Project Description
 
