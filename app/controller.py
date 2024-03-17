@@ -56,7 +56,7 @@ class BotRunner(object):
         result = await pipeline_tag(trace_id="test", content=file_data)
         content = [
             f"**🥽 AnimeScore: {result.anime_score}**",
-            f"**🔍 Infer Tags**: `{result.anime_tags}`",
+            f"**🔍 Infer Tags**: ```{result.anime_tags}```",
         ]
         try:
             file_data.seek(0)
@@ -80,7 +80,7 @@ class BotRunner(object):
         except Exception as e:
             logger.exception(e)
         else:
-            content.append(f"**✏ NovelAI Prompt:** `{read_prompt}`")
+            content.append(f"**✏ NovelAI Prompt:** ```{read_prompt}```")
             if read_model:
                 content.append(f"**📦 Model:** `{read_model.value}`")
             if meta_data.Source:
@@ -89,7 +89,7 @@ class BotRunner(object):
                 content.append("**🧊 Not Signed by NovelAI**")
             content.append(f"**✏ Mode**: `{mode}`")
         if result.characters:
-            content.append(f"**🌟 Characters:** `{result.characters}`")
+            content.append(f"**🌟 Characters:** `{','.join(result.characters)}`")
         prompt = telegramify_markdown.convert("\n".join(content))
         file_data.close()
         return prompt
