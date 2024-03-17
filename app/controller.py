@@ -80,7 +80,7 @@ class BotRunner(object):
         except Exception as e:
             logger.exception(e)
         else:
-            content.append(f"**✏ NovelAI Prompt:** ```\n{read_prompt}```")
+            content.append(f"**✏ NovelAI Prompt:** ```{read_prompt}```")
             if read_model:
                 content.append(f"**📦 Model:** `{read_model.value}`")
             if meta_data.Source:

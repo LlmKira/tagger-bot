@@ -27,7 +27,7 @@ dependencies = [
     "anime-identify>=0.1.0",
     "aiofiles>=23.2.1",
     "novelai-python>=0.2.1",
-    "telegramify-markdown>=0.1.1",
+    "telegramify-markdown>=0.1.2",
 ]
 
 
