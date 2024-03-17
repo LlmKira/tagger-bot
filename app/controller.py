@@ -56,7 +56,7 @@ class BotRunner(object):
         result = await pipeline_tag(trace_id="test", content=file_data)
         content = [
             f"**🥽 AnimeScore: {result.anime_score}**",
-            f"**🔍 Infer Tags**: ```{result.anime_tags}```",
+            f"**🔍 Infer Tags**: ```\n{result.anime_tags}```",
         ]
         try:
             file_data.seek(0)
@@ -71,16 +71,16 @@ class BotRunner(object):
             elif rq_type == "Img2ImgRequest":
                 mode += "Img2Img"
             if meta_data.Comment.reference_strength:
-                mode += f"+VibeTransfer"
+                mode += "+VibeTransfer"
             try:
                 file_data.seek(0)
                 is_novelai = meta_data.verify_image_is_novelai(Image.open(file_data))
-            except Exception as e:
+            except Exception:
                 is_novelai = False
         except Exception as e:
             logger.exception(e)
         else:
-            content.append(f"**✏ NovelAI Prompt:** ```{read_prompt}```")
+            content.append(f"**✏ NovelAI Prompt:** ```\n{read_prompt}```")
             if read_model:
                 content.append(f"**📦 Model:** `{read_model.value}`")
             if meta_data.Source:
@@ -103,7 +103,9 @@ class BotRunner(object):
             asyncio_helper.proxy = BotSetting.proxy_address
             logger.info("Proxy tunnels are being used!")
 
-        @bot.message_handler(content_types=["photo", "document"], chat_types=["private"])
+        @bot.message_handler(
+            content_types=["photo", "document"], chat_types=["private"]
+        )
         async def start(message: types.Message):
             if settings.mode.only_white:
                 if message.chat.id not in settings.mode.white_group:
@@ -116,27 +118,29 @@ class BotRunner(object):
                 prompt = await self.tagger(file=message.document)
                 await bot.reply_to(message, text=prompt, parse_mode="MarkdownV2")
 
-        @bot.message_handler(commands="nsfw", chat_types=["supergroup", "group", "private"])
+        @bot.message_handler(
+            commands="nsfw", chat_types=["supergroup", "group", "private"]
+        )
         async def nsfw(message: types.Message):
             if settings.mode.only_white:
                 if message.chat.id not in settings.mode.white_group:
                     return logger.info(f"White List Out {message.chat.id}")
             contents = RandomPromptGenerator(nsfw_enabled=True).generate()
             prompt = formatting.format_text(
-                formatting.mbold("🥛 NSFW Prompt"),
-                formatting.mcode(content=contents)
+                formatting.mbold("🥛 NSFW Prompt"), formatting.mcode(content=contents)
             )
             return await bot.reply_to(message, text=prompt, parse_mode="MarkdownV2")
 
-        @bot.message_handler(commands="sfw", chat_types=["supergroup", "group", "private"])
+        @bot.message_handler(
+            commands="sfw", chat_types=["supergroup", "group", "private"]
+        )
         async def sfw(message: types.Message):
             if settings.mode.only_white:
                 if message.chat.id not in settings.mode.white_group:
                     return logger.info(f"White List Out {message.chat.id}")
             contents = RandomPromptGenerator(nsfw_enabled=False).generate()
             prompt = formatting.format_text(
-                formatting.mbold("🥛 SFW Prompt"),
-                formatting.mcode(content=contents)
+                formatting.mbold("🥛 SFW Prompt"), formatting.mcode(content=contents)
             )
             return await bot.reply_to(message, text=prompt, parse_mode="MarkdownV2")
 
