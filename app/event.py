@@ -28,16 +28,14 @@ async def pipeline_tag(trace_id, content: Union[IO, TextIOBase]) -> TaggerResult
     content.seek(0)
     raw_output_wd = await WdTaggerSDK(base_url=TaggerSetting.wd_api_endpoint).upload(
         file=content.read(),
-        token="censor",
+        token="tag",
         general_threshold=0.35,
         character_threshold=0.75,
     )
-    tag_result: str = raw_output_wd["tag_result"]
+    tag_result: str = raw_output_wd["sorted_general_strings"]
     character_res: dict = raw_output_wd["character_res"]
     characters = list(character_res.keys())
     logger.info(f"Censored {trace_id},score {anime_score},result {tag_result}")
     return TaggerResult(
-        anime_score=anime_score,
-        anime_tags=tag_result,
-        characters=characters
+        anime_score=anime_score, anime_tags=tag_result, characters=characters
     )
