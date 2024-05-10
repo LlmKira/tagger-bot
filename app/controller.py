@@ -4,18 +4,19 @@
 # @Software: PyCharm
 from io import BytesIO
 
+import telegramify_markdown
 from PIL import Image
 from asgiref.sync import sync_to_async
 from loguru import logger
-from novelai_python.tool.random_prompt import RandomPromptGenerator
 from novelai_python.tool.image_metadata import ImageMetadata
+from novelai_python.tool.random_prompt import RandomPromptGenerator
 from telebot import formatting
 from telebot import types
 from telebot import util
 from telebot.async_telebot import AsyncTeleBot
 from telebot.asyncio_helper import ApiTelegramException
 from telebot.asyncio_storage import StateMemoryStorage
-import telegramify_markdown
+
 from app.event import pipeline_tag
 from app_conf import settings
 from setting.telegrambot import BotSetting
@@ -79,6 +80,7 @@ class BotRunner(object):
                 is_novelai = False
         except Exception as e:
             logger.exception(e)
+            return "🥛 Not Found Valid Comment, where your image from?"
         else:
             content.append(f"**✏ NovelAI Prompt:** ```{read_prompt}```")
             if read_model:
