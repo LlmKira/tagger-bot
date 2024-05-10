@@ -80,7 +80,6 @@ class BotRunner(object):
                 is_novelai = False
         except Exception as e:
             logger.exception(e)
-            return "🥛 Not Found Valid Comment, where your image from?"
         else:
             content.append(f"**✏ NovelAI Prompt:** ```{read_prompt}```")
             if read_model:
