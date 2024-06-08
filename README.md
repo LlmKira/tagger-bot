@@ -16,7 +16,6 @@ git clone https://github.com/LlmKira/tagger-bot
 cd tagger-bot
 cp .env.exp .env
 nano .env
-
 ```
 
 ### Run In Terminal
@@ -30,8 +29,10 @@ pdm run main.py
 ### Run In BackGround
 
 ```shell
+apt install npm
+npm install pm2 -g
 pm2 start pm2.json
 pm2 status
-pm2 stop pm2.json
 
+pm2 stop pm2.json
 ```
