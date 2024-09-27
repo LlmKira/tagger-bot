@@ -74,19 +74,24 @@ class BotRunner(object):
         except Exception as e:
             logger.info(f"Empty metadata {e}")
         else:
-            content.append(f"**📦 Description:** `{read_prompt}`")
+            content.append(f"**📦 Description:** ```{read_prompt}```")
             if read_model:
                 content.append(f"**📦 Model:** `{read_model.value}`")
             if meta_data.Source:
                 content.append(f"**📦 Source:** `{meta_data.Source}`")
             content.append(f"**📦 Mode**: `{mode}`")
         try:
-            file_data.seek(0)
-            is_novelai = ImageVerifier().verify(file_data)
-        except Exception:
             is_novelai = False
-        if not is_novelai:
-            content.append("**🧊 Not Signed by NovelAI**")
+            has_latent = False
+            file_data.seek(0)
+            is_novelai, has_latent = ImageVerifier().verify(file_data)
+        except Exception:
+            logger.debug("Not NovelAI")
+        else:
+            if not is_novelai:
+                content.append("**🧊 Not Signed by NovelAI**")
+            if not has_latent:
+                content.append("**🧊 No Latent Space**")
         if result.characters:
             content.append(f"**🌟 Characters:** `{','.join(result.characters)}`")
         prompt = telegramify_markdown.convert("\n".join(content))
