@@ -56,7 +56,7 @@ class BotRunner(object):
         result = await pipeline_tag(trace_id="test", content=file_data)
         content = [
             f"**🥽 AnimeScore: {result.anime_score}**",
-            f"**🔍 Infer Tags**: ```\n{result.anime_tags}```",
+            f"**🔍 Infer Tags**: >{result.anime_tags}",
         ]
         try:
             file_data.seek(0)
@@ -74,7 +74,7 @@ class BotRunner(object):
         except Exception as e:
             logger.info(f"Empty metadata {e}")
         else:
-            content.append(f"**📦 Description:** ```{read_prompt}```")
+            content.append(f"**📦 Description:** \n>{read_prompt}")
             if read_model:
                 content.append(f"**📦 Model:** `{read_model.value}`")
             if meta_data.Source:

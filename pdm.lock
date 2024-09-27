@@ -2025,16 +2025,16 @@ files = [
 
 [[package]]
 name = "telegramify-markdown"
-version = "0.1.12"
+version = "0.1.13"
 requires_python = ">=3.8"
 summary = "Convert Markdown to a format usable by Telegram."
 dependencies = [
     "mistletoe==1.4.0",
-    "pytelegrambotapi>=4.18.1",
+    "pytelegrambotapi>=4.22.0",
 ]
 files = [
-    {file = "telegramify_markdown-0.1.12-py3-none-any.whl", hash = "sha256:6661b1fea9fec514268b2e8752274d9fb46ae0a46ea0e77d0438a59e0e1a9b64"},
-    {file = "telegramify_markdown-0.1.12.tar.gz", hash = "sha256:fb1b435e18eb6886e2898595221d5ff3ded841b6b7c21d5b021de7b942144827"},
+    {file = "telegramify_markdown-0.1.13-py3-none-any.whl", hash = "sha256:398a083101145e60eb926c351ee4e4be249ed0311999f8e732f21993bfd064ee"},
+    {file = "telegramify_markdown-0.1.13.tar.gz", hash = "sha256:60ce24260ae91b7b99db26ea2fd4f2b297b15c33614757538fcf98bb2d5701b4"},
 ]
 
 [[package]]
