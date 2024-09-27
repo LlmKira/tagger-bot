@@ -90,8 +90,8 @@ class BotRunner(object):
         else:
             if not is_novelai:
                 content.append("**🧊 Not Signed by NovelAI**")
-            if not has_latent:
-                content.append("**🧊 No Latent Space**")
+            if has_latent:
+                content.append("**🧊 Find Latent Space**")
         if result.characters:
             content.append(f"**🌟 Characters:** `{','.join(result.characters)}`")
         prompt = telegramify_markdown.convert("\n".join(content))
