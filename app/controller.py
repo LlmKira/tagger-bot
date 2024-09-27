@@ -45,7 +45,7 @@ class BotRunner(object):
         downloaded_file = await self.bot.download_file(_file_info.file_path)
         return downloaded_file
 
-    async def tagger(self, file) -> str:
+    async def tagger(self, file, hidden_long_text=False) -> str:
         raw_file_data = await self.download(file=file)
         if raw_file_data is None:
             return "🥛 Not An image"
@@ -56,7 +56,7 @@ class BotRunner(object):
         result = await pipeline_tag(trace_id="test", content=file_data)
         content = [
             f"**🥽 AnimeScore: {result.anime_score}**",
-            f"**🔍 Infer Tags**: " f"\n>{result.anime_tags}\n",
+            "**🔍 Infer Tags**",
         ]
         try:
             file_data.seek(0)
@@ -73,8 +73,11 @@ class BotRunner(object):
                 mode += "+VibeTransfer"
         except Exception as e:
             logger.info(f"Empty metadata {e}")
+            content.append(f"\n```{result.anime_tags}```\n")
         else:
-            content.append(f"**📦 Description:** \n>{read_prompt}\n")
+            content.append(f"\n>{result.anime_tags}\n")
+            if read_prompt:
+                content.append(f"**📦 Prompt:** `{read_prompt}`")
             if read_model:
                 content.append(f"**📦 Model:** `{read_model.value}`")
             if meta_data.Source:
@@ -164,10 +167,14 @@ class BotRunner(object):
             reply_message_ph = reply_message.photo
             reply_message_doc = reply_message.document
             if reply_message_ph:
-                prompt = await self.tagger(file=reply_message_ph[-1])
+                prompt = await self.tagger(
+                    file=reply_message_ph[-1], hidden_long_text=True
+                )
                 return await bot.reply_to(message, text=prompt, parse_mode="MarkdownV2")
             if reply_message_doc:
-                prompt = await self.tagger(file=reply_message_doc)
+                prompt = await self.tagger(
+                    file=reply_message_doc, hidden_long_text=True
+                )
                 return await bot.reply_to(message, text=prompt, parse_mode="MarkdownV2")
             return await bot.reply_to(message, text="🥛 Not image")
 
