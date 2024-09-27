@@ -79,7 +79,7 @@ class BotRunner(object):
                 content.append(f"**📦 Model:** `{read_model.value}`")
             if meta_data.Source:
                 content.append(f"**📦 Source:** `{meta_data.Source}`")
-            content.append(f"**📦 Mode**: `{mode}`")
+            content.append(f"**📦 Mode:** `{mode}`")
         try:
             is_novelai = False
             has_latent = False
