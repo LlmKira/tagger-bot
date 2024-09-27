@@ -75,7 +75,10 @@ class BotRunner(object):
             logger.info(f"Empty metadata {e}")
             content.append(f"\n```{result.anime_tags}```\n")
         else:
-            content.append(f"\n>{result.anime_tags}\n")
+            if hidden_long_text:
+                content.append(f"\n>{result.anime_tags}\n")
+            else:
+                content.append(f"\n```{result.anime_tags}```\n")
             if read_prompt:
                 content.append(f"**📦 Prompt:** `{read_prompt}`")
             if read_model:
