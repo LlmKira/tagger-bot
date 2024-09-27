@@ -5,10 +5,9 @@
 from io import BytesIO
 
 import telegramify_markdown
-from PIL import Image
 from asgiref.sync import sync_to_async
 from loguru import logger
-from novelai_python.tool.image_metadata import ImageMetadata
+from novelai_python.tool.image_metadata import ImageMetadata, ImageVerifier
 from novelai_python.tool.random_prompt import RandomPromptGenerator
 from telebot import formatting
 from telebot import types
@@ -64,7 +63,6 @@ class BotRunner(object):
             meta_data = ImageMetadata.load_image(file_data)
             read_prompt = meta_data.Description
             read_model = meta_data.used_model
-
             rq_type = meta_data.Comment.request_type
             mode = ""
             if rq_type == "PromptGenerateRequest":
@@ -73,22 +71,22 @@ class BotRunner(object):
                 mode += "Img2Img"
             if meta_data.Comment.reference_strength:
                 mode += "+VibeTransfer"
-            try:
-                file_data.seek(0)
-                is_novelai = meta_data.verify_image_is_novelai(Image.open(file_data))
-            except Exception:
-                is_novelai = False
         except Exception as e:
-            logger.exception(e)
+            logger.info(f"Empty metadata {e}")
         else:
-            content.append(f"**✏ NovelAI Prompt:** ```{read_prompt}```")
+            content.append(f"**📦 Description:** `{read_prompt}`")
             if read_model:
                 content.append(f"**📦 Model:** `{read_model.value}`")
             if meta_data.Source:
                 content.append(f"**📦 Source:** `{meta_data.Source}`")
-            if not is_novelai:
-                content.append("**🧊 Not Signed by NovelAI**")
-            content.append(f"**✏ Mode**: `{mode}`")
+            content.append(f"**📦 Mode**: `{mode}`")
+        try:
+            file_data.seek(0)
+            is_novelai = ImageVerifier().verify(file_data)
+        except Exception:
+            is_novelai = False
+        if not is_novelai:
+            content.append("**🧊 Not Signed by NovelAI**")
         if result.characters:
             content.append(f"**🌟 Characters:** `{','.join(result.characters)}`")
         prompt = telegramify_markdown.convert("\n".join(content))
