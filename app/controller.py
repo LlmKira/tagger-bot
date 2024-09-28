@@ -24,34 +24,50 @@ from setting.telegrambot import BotSetting
 StepCache = StateMemoryStorage()
 
 
+def extract_between_multiple_markers(input_list, start_markers, end_markers):
+    extracting = False
+    extracted_elements = []
+    for item in input_list:
+        # Check if the item contains any start marker
+        if any(start_marker in item for start_marker in start_markers):
+            extracting = True
+            # continue  # Skip appending the marker itself
+        if end_markers:
+            if any(end_marker in item for end_marker in end_markers):
+                break
+        if extracting:
+            extracted_elements.append(item)
+    return extracted_elements
+
+
 async def read_a111(file: BytesIO):
     try:
         file.seek(0)
         with Image.open(file) as img:
-            print(img.info)
             parameter = img.info.get("parameters", None)
             if not parameter:
                 raise Exception("Empty Parameter")
-            if isinstance(parameter, str):
-                parameter = parameter.split(",")
-                prompt = []
-                info = []
-                continue_flag = True
-                for p in parameter:
-                    if p.count(":") > 0 and p.count("\n") > 0:
-                        continue_flag = False
-                    if continue_flag:
-                        prompt.append(p)
-                    else:
-                        info.append(p.replace("\n", ""))
-                prompt = ",".join(prompt)
-                info = "\n".join(info)
-                parameter = f"{prompt}\n{info}"
+            if not isinstance(parameter, str):
+                parameter = str(parameter)
+            parameters = parameter.split(",")
+            prompt = extract_between_multiple_markers(
+                parameters, [""], ["Negative prompt:", "Steps:"]
+            )
+            negative_prompt = extract_between_multiple_markers(
+                parameters, ["Negative prompt:"], ["Steps:"]
+            )
+            info = extract_between_multiple_markers(parameters, ["Steps:"], None)
+            prompt = ",".join(prompt)
+            negative_prompt = ",".join(negative_prompt)
+            info = ",".join(info)
+            message = f"{prompt}\n{negative_prompt}\n{info}"
+            while "\n\n" in message:
+                message = message.replace("\n\n", "\n")
     except Exception as e:
         logger.debug(f"Error {e}")
         return []
     else:
-        return [f"📦 Prompt: \n>{parameter}\n"]
+        return [f"📦 Prompt: \n>{message}\n"]
 
 
 async def read_comfyui(file: BytesIO):
