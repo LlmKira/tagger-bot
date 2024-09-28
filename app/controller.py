@@ -24,6 +24,75 @@ from setting.telegrambot import BotSetting
 StepCache = StateMemoryStorage()
 
 
+async def read_a111(file: BytesIO):
+    try:
+        file.seek(0)
+        with Image.open(file) as img:
+            print(img.info)
+            parameter = img.info.get("parameters", None)
+            if not parameter:
+                raise Exception("Empty Parameter")
+    except Exception as e:
+        logger.debug(f"Error {e}")
+        return []
+    else:
+        return [f"📦 Prompt: \n>{parameter}\n"]
+
+
+async def read_comfyui(file: BytesIO):
+    try:
+        file.seek(0)
+        with Image.open(file) as img:
+            print(img.info)
+            parameter = img.info.get("prompt", None)
+            if not parameter:
+                raise Exception("Empty Parameter")
+    except Exception as e:
+        logger.debug(f"Error {e}")
+        return []
+    else:
+        return [f"**📦 Comfyui:** \n```{parameter}```"]
+
+
+async def read_novelai(file: BytesIO):
+    message = []
+    try:
+        file.seek(0)
+        meta_data = ImageMetadata.load_image(file)
+        read_prompt = meta_data.Description
+        read_model = meta_data.used_model
+        rq_type = meta_data.Comment.request_type
+        mode = ""
+        if rq_type == "PromptGenerateRequest":
+            mode += "Text2Image"
+        elif rq_type == "Img2ImgRequest":
+            mode += "Img2Img"
+        if meta_data.Comment.reference_strength:
+            mode += "+VibeTransfer"
+    except Exception as e:
+        logger.debug(f"Empty metadata {e}")
+        return []
+    else:
+        message.extend(
+            [
+                f"**📦 Prompt:** `{read_prompt}`",
+                f"**📦 Model:** `{read_model.value}`",
+                f"**📦 Source:** `{meta_data.Source}`",
+            ]
+        )
+    try:
+        file.seek(0)
+        is_novelai, has_latent = ImageVerifier().verify(file)
+    except Exception:
+        logger.debug("Not NovelAI")
+    else:
+        if is_novelai:
+            message.append("**🧊 Signed by NovelAI**")
+        if has_latent:
+            message.append("**🧊 Find Latent Space**")
+    return message
+
+
 @sync_to_async
 def sync_to_async_func():
     pass
@@ -46,72 +115,6 @@ class BotRunner(object):
         downloaded_file = await self.bot.download_file(_file_info.file_path)
         return downloaded_file
 
-    async def read_a111(self, file: BytesIO):
-        try:
-            file.seek(0)
-            with Image.open(file) as img:
-                print(img.info)
-                parameter = img.info.get("parameters", None)
-                if not parameter:
-                    raise Exception("Empty Parameter")
-        except Exception as e:
-            logger.debug(f"Error {e}")
-            return []
-        else:
-            return [f"📦 Prompt: \n>{parameter}\n"]
-
-    async def read_comfyui(self, file: BytesIO):
-        try:
-            file.seek(0)
-            with Image.open(file) as img:
-                print(img.info)
-                parameter = img.info.get("prompt", None)
-                if not parameter:
-                    raise Exception("Empty Parameter")
-        except Exception as e:
-            logger.debug(f"Error {e}")
-            return []
-        else:
-            return [f"**📦 Comfyui:** \n```{parameter}```"]
-
-    async def read_novelai(self, file: BytesIO):
-        message = []
-        try:
-            file.seek(0)
-            meta_data = ImageMetadata.load_image(file)
-            read_prompt = meta_data.Description
-            read_model = meta_data.used_model
-            rq_type = meta_data.Comment.request_type
-            mode = ""
-            if rq_type == "PromptGenerateRequest":
-                mode += "Text2Image"
-            elif rq_type == "Img2ImgRequest":
-                mode += "Img2Img"
-            if meta_data.Comment.reference_strength:
-                mode += "+VibeTransfer"
-        except Exception as e:
-            logger.debug(f"Empty metadata {e}")
-            return []
-        else:
-            message.extend(
-                [
-                    f"**📦 Prompt:** `{read_prompt}`",
-                    f"**📦 Model:** `{read_model.value}`",
-                    f"**📦 Source:** `{meta_data.Source}`",
-                ]
-            )
-        try:
-            file.seek(0)
-            is_novelai, has_latent = ImageVerifier().verify(file)
-        except Exception:
-            logger.debug("Not NovelAI")
-        else:
-            if is_novelai:
-                message.append("**🧊 Signed by NovelAI**")
-            if has_latent:
-                message.append("**🧊 Find Latent Space**")
-        return message
-
     async def tagger(self, file, hidden_long_text=False) -> str:
         raw_file_data = await self.download(file=file)
         if raw_file_data is None:
@@ -125,9 +128,9 @@ class BotRunner(object):
             f"**🥽 AnimeScore: {result.anime_score}**",
             "**🔍 Infer Tags**",
         ]
-        novelai_message = await self.read_novelai(file=file_data)
-        comfyui_message = await self.read_comfyui(file=file_data)
-        a111_message = await self.read_a111(file=file_data)
+        novelai_message = await read_novelai(file=file_data)
+        comfyui_message = await read_comfyui(file=file_data)
+        a111_message = await read_a111(file=file_data)
         # 只能选一个有内容的
         read_message = next(
             filter(lambda msg: msg, [novelai_message, comfyui_message, a111_message]),
