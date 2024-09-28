@@ -60,14 +60,16 @@ async def read_a111(file: BytesIO):
             prompt = ",".join(prompt)
             negative_prompt = ",".join(negative_prompt)
             info = ",".join(info)
-            message = f"{prompt}\n{negative_prompt}\n{info}"
+            message = f"{negative_prompt}\n{info}"
             while "\n\n" in message:
                 message = message.replace("\n\n", "\n")
+            while "\n\n" in prompt:
+                prompt = prompt.replace("\n\n", "\n")
     except Exception as e:
         logger.debug(f"Error {e}")
         return []
     else:
-        return [f"**📦 Prompt**\n>{message}\n"]
+        return [f"**📦 Prompt**\n```{prompt}```", f"\n>{message}\n"]
 
 
 async def read_comfyui(file: BytesIO):
