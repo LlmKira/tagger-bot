@@ -75,9 +75,9 @@ async def read_novelai(file: BytesIO):
     else:
         message.extend(
             [
-                f"**📦 Prompt:** `{read_prompt}`",
-                f"**📦 Model:** `{read_model.value}`",
-                f"**📦 Source:** `{meta_data.Source}`",
+                f"**📦 Prompt:** `{read_prompt}`" if read_prompt else "",
+                f"**📦 Model:** `{read_model.value}`" if read_model else "",
+                f"**📦 Source:** `{meta_data.Source}`" if meta_data.Source else "",
             ]
         )
     try:
