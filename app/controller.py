@@ -69,7 +69,7 @@ async def read_a111(file: BytesIO):
         logger.debug(f"Error {e}")
         return []
     else:
-        return [f"**📦 Prompt**\n```{prompt}```", f"\n>{message}\n"]
+        return [f"**📦 Prompt**\n```{prompt}```", f">{message}\n"]
 
 
 async def read_comfyui(file: BytesIO):
