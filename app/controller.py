@@ -33,7 +33,20 @@ async def read_a111(file: BytesIO):
             if not parameter:
                 raise Exception("Empty Parameter")
             if isinstance(parameter, str):
-                parameter = parameter.replace("\n\n", "\n")
+                parameter = parameter.split(",")
+                prompt = []
+                info = []
+                continue_flag = True
+                for p in parameter:
+                    if p.count(":") > 0 and p.count("\n") > 0:
+                        continue_flag = False
+                    if continue_flag:
+                        prompt.append(p)
+                    else:
+                        info.append(p.replace("\n", ""))
+                prompt = ",".join(prompt)
+                info = "\n".join(info)
+                parameter = f"{prompt}\n{info}"
     except Exception as e:
         logger.debug(f"Error {e}")
         return []
