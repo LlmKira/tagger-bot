@@ -32,6 +32,8 @@ async def read_a111(file: BytesIO):
             parameter = img.info.get("parameters", None)
             if not parameter:
                 raise Exception("Empty Parameter")
+            if isinstance(parameter, str):
+                parameter = parameter.replace("\n\n", "\n")
     except Exception as e:
         logger.debug(f"Error {e}")
         return []
