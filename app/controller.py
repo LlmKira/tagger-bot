@@ -69,7 +69,7 @@ async def read_a111(file: BytesIO):
         logger.debug(f"Error {e}")
         return []
     else:
-        return [f"**📦 Prompt**\n```{prompt}```", f">{message}\n"]
+        return [f"**📦 Prompt**\n```{prompt}```", f">`{message}`\n"]
 
 
 async def read_comfyui(file: BytesIO):
@@ -170,7 +170,7 @@ class BotRunner(object):
             None,
         )
         if read_message and hidden_long_text:
-            infer_message.append(f"\n>{result.anime_tags}\n")
+            infer_message.append(f"\n>`{result.anime_tags}`\n")
         else:
             infer_message.append(f"```{result.anime_tags}```")
         if result.characters:
