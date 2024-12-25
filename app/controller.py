@@ -96,7 +96,6 @@ async def read_comfyui(file: BytesIO):
     try:
         file.seek(0)
         with Image.open(file) as img:
-            print(img.info)
             parameter = img.info.get("prompt")
             if not parameter:
                 raise Exception("Empty Parameter")
