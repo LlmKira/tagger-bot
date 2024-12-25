@@ -230,7 +230,10 @@ class BotRunner(object):
             text: str,
             reply_to_message_id: int = None,
         ):
-            blocks = await telegramify_markdown.telegramify(text)
+            blocks = await telegramify_markdown.telegramify(
+                text,
+                max_word_count=2000,
+            )
             for item in blocks:
                 if item.content_type == ContentTypes.TEXT:
                     await bot.send_message(
