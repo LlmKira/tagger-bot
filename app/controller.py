@@ -240,29 +240,32 @@ class BotRunner(object):
                 max_word_count=1000,
             )
             for item in blocks:
-                if item.content_type == ContentTypes.TEXT:
-                    await bot.send_message(
-                        chat_id=chat_id,
-                        reply_to_message_id=reply_to_message_id,
-                        text=item.content,
-                        parse_mode="MarkdownV2",
-                    )
-                elif item.content_type == ContentTypes.PHOTO:
-                    await bot.send_photo(
-                        chat_id,
-                        (item.file_name, item.file_data),
-                        caption=item.caption,
-                        reply_to_message_id=reply_to_message_id,
-                        parse_mode="MarkdownV2",
-                    )
-                elif item.content_type == ContentTypes.FILE:
-                    await bot.send_document(
-                        chat_id,
-                        (item.file_name, item.file_data),
-                        caption=item.caption,
-                        reply_to_message_id=reply_to_message_id,
-                        parse_mode="MarkdownV2",
-                    )
+                try:
+                    if item.content_type == ContentTypes.TEXT:
+                        await bot.send_message(
+                            chat_id=chat_id,
+                            reply_to_message_id=reply_to_message_id,
+                            text=item.content,
+                            parse_mode="MarkdownV2",
+                        )
+                    elif item.content_type == ContentTypes.PHOTO:
+                        await bot.send_photo(
+                            chat_id,
+                            (item.file_name, item.file_data),
+                            caption=item.caption,
+                            reply_to_message_id=reply_to_message_id,
+                            parse_mode="MarkdownV2",
+                        )
+                    elif item.content_type == ContentTypes.FILE:
+                        await bot.send_document(
+                            chat_id,
+                            (item.file_name, item.file_data),
+                            caption=item.caption,
+                            reply_to_message_id=reply_to_message_id,
+                            parse_mode="MarkdownV2",
+                        )
+                except Exception as e:
+                    logger.exception(e)
 
         @bot.message_handler(
             content_types=["photo", "document"], chat_types=["private"]
