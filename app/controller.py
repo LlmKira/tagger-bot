@@ -26,6 +26,19 @@ StepCache = StateMemoryStorage()
 prompt_generator = RandomPromptGenerator(nsfw_enabled=False)
 
 
+def cite(
+    content: str,
+):
+    return f">{content}\n"
+
+
+def code(
+    content: str,
+    language: str,
+):
+    return f"```{language}\n{content}\n```"
+
+
 def extract_between_multiple_markers(input_list, start_markers, end_markers):
     extracting = False
     extracted_elements = []
@@ -73,9 +86,9 @@ async def read_a111(file: BytesIO):
     else:
         return [
             formatting.mbold("📦 Prompt", escape=False),
-            formatting.mcode(content=prompt, language="txt", escape=False),
+            code(content=prompt, language="txt"),
             formatting.mbold("📦 Negative Prompt", escape=False),
-            formatting.mcite(content=negative_prompt, expandable=True, escape=False),
+            cite(content=negative_prompt),
         ]
 
 
@@ -89,7 +102,7 @@ async def read_comfyui(file: BytesIO):
                 raise Exception("Empty Parameter")
             return [
                 formatting.mbold("📦 Comfyui", escape=False),
-                formatting.mcode(content=parameter, language="txt", escape=False),
+                code(content=parameter, language="txt"),
             ]
     except Exception as e:
         logger.debug(f"Error {e}")
@@ -116,17 +129,12 @@ async def read_novelai(file: BytesIO):
     else:
         message.append(formatting.mbold(f"📦 NovelAI {mode}", escape=False))
         if meta_data.Comment.prompt:
-            message.append(
-                formatting.mcode(
-                    content=meta_data.Comment.prompt, language="txt", escape=False
-                )
-            )
+            message.append(code(content=meta_data.Comment.prompt, language="txt"))
         if meta_data.Comment.negative_prompt:
             message.append(
-                formatting.mcode(
+                code(
                     content=meta_data.Comment.negative_prompt,
                     language="txt",
-                    escape=False,
                 )
             )
         if meta_data.used_model:
@@ -138,10 +146,9 @@ async def read_novelai(file: BytesIO):
                 formatting.mbold(f"📦 Source #{meta_data.Source}", escape=False),
             )
         message.append(
-            formatting.mcode(
+            code(
                 content=meta_data.Comment.model_dump_json(indent=2),
                 language="json",
-                escape=False,
             )
         )
     try:
@@ -197,17 +204,13 @@ class BotRunner(object):
             None,
         )
         if read_message:
-            infer_message.append(
-                formatting.mcite(
-                    content=infer.anime_tags, expandable=True, escape=False
-                )
-            )
+            infer_message.append(cite(content=infer.anime_tags))
+        else:
+            infer_message.append(code(content=infer.anime_tags, language="txt"))
         if infer.characters:
             infer_message.append(formatting.mbold("🥛 Characters", escape=False))
             infer_message.append(
-                formatting.mcode(
-                    content=",".join(infer.characters), language="txt", escape=False
-                )
+                code(content=",".join(infer.characters), language="txt")
             )
         if not read_message:
             infer_message.append(formatting.mbold("🥛 No Metadata", escape=False))
