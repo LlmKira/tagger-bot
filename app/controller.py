@@ -237,7 +237,7 @@ class BotRunner(object):
         ):
             blocks = await telegramify_markdown.telegramify(
                 text,
-                max_word_count=2000,
+                max_word_count=1000,
             )
             for item in blocks:
                 if item.content_type == ContentTypes.TEXT:
