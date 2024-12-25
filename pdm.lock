@@ -5,7 +5,7 @@
 groups = ["default"]
 strategy = ["cross_platform"]
 lock_version = "4.5.0"
-content_hash = "sha256:c3e9813c1ab2c9af0e062b1270eb0b3ace9d7a267bcc762f5a39fd913fb9e107"
+content_hash = "sha256:6a9b917eb60b00c14cb9c62b874c302c638bb5befcfdbab7201529378dadd1ca"
 
 [[metadata.targets]]
 requires_python = ">=3.9"
@@ -990,12 +990,12 @@ files = [
 
 [[package]]
 name = "json-repair"
-version = "0.29.5"
-requires_python = ">=3.8"
+version = "0.33.0"
+requires_python = ">=3.9"
 summary = "A package to repair broken json strings"
 files = [
-    {file = "json_repair-0.29.5-py3-none-any.whl", hash = "sha256:4932e65ce9d61f820e1741c9fff4e9801db87cd542166bfff56f2ea4f2a94104"},
-    {file = "json_repair-0.29.5.tar.gz", hash = "sha256:a6bb7999ee179856efc404fe1b96c15b1e26bb371dd2f246382464b5332d4d1a"},
+    {file = "json_repair-0.33.0-py3-none-any.whl", hash = "sha256:6285148ef06d059a3ae5de2c665c441ac20999d1248f8795faaa864fa88b796d"},
+    {file = "json_repair-0.33.0.tar.gz", hash = "sha256:1796062b8acf3b081141cb0293c80cad5f5ad29be1cd141de601361ee3e533ac"},
 ]
 
 [[package]]

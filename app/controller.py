@@ -2,8 +2,10 @@
 # @Time    : 2023/11/18 上午12:18
 # @File    : controller.py
 # @Software: PyCharm
+import json
 from io import BytesIO
 
+import json_repair
 import telegramify_markdown
 from PIL import Image
 from loguru import logger
@@ -99,9 +101,10 @@ async def read_comfyui(file: BytesIO):
             parameter = img.info.get("prompt")
             if not parameter:
                 raise Exception("Empty Parameter")
+            decoded_object = json_repair.loads(parameter)
             return [
                 formatting.mbold("📦 Comfyui", escape=False),
-                code(content=parameter, language="txt"),
+                code(content=json.dumps(decoded_object, indent=2), language="txt"),
             ]
     except Exception as e:
         logger.debug(f"Error {e}")

@@ -28,6 +28,7 @@ dependencies = [
     "aiofiles>=23.2.1",
     "novelai-python>=0.7.0",
     "telegramify-markdown>=0.3.0",
+    "json-repair>=0.33.0",
 ]
 
 
@@ -95,3 +96,5 @@ skip-magic-trailing-comma = false
 
 # Like Black, automatically detect the appropriate line ending.
 line-ending = "auto"
+
+[tool.pdm]
