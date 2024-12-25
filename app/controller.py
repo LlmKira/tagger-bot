@@ -104,7 +104,7 @@ async def read_comfyui(file: BytesIO):
         decoded_object = json_repair.loads(parameter)
         return [
             formatting.mbold("📦 Comfyui", escape=False),
-            code(content=json.dumps(decoded_object, indent=2), language="txt"),
+            code(content=json.dumps(decoded_object, indent=2), language="json"),
         ]
     except Exception as e:
         logger.debug(f"Error {e}")
