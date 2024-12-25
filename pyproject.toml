@@ -26,8 +26,8 @@ dependencies = [
     "opencv-python>=4.8.1.78",
     "anime-identify>=0.1.0",
     "aiofiles>=23.2.1",
-    "novelai-python>=0.4.12",
-    "telegramify-markdown>=0.1.2",
+    "novelai-python>=0.7.0",
+    "telegramify-markdown>=0.3.0",
 ]
 
 
