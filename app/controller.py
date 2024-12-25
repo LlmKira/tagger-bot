@@ -123,11 +123,14 @@ async def read_novelai(file: BytesIO):
             mode += "Img2Img"
         if meta_data.Comment.reference_strength:
             mode += "+VibeTransfer"
+        if not meta_data.Comment.prompt:
+            return []
     except Exception as e:
         logger.debug(f"Empty metadata {e}")
         return []
 
-    message.append(formatting.mbold(f"📦 NovelAI {mode}", escape=False))
+    message.append(formatting.mbold("📦 NovelAI", escape=False))
+    message.append(f"📦 Mode: {mode}")
     if meta_data.Comment.prompt:
         message.append(code(content=meta_data.Comment.prompt, language="txt"))
     if meta_data.Comment.negative_prompt:
