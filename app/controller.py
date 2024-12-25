@@ -126,32 +126,26 @@ async def read_novelai(file: BytesIO):
     except Exception as e:
         logger.debug(f"Empty metadata {e}")
         return []
-    else:
-        message.append(formatting.mbold(f"📦 NovelAI {mode}", escape=False))
-        if meta_data.Comment.prompt:
-            message.append(code(content=meta_data.Comment.prompt, language="txt"))
-        if meta_data.Comment.negative_prompt:
-            message.append(
-                code(
-                    content=meta_data.Comment.negative_prompt,
-                    language="txt",
-                )
-            )
-        if meta_data.used_model:
-            model_tag = str(meta_data.used_model.value).replace("-", "_")
-            message.append(
-                formatting.mbold(f"📦 Model #{model_tag}", escape=False),
-            )
-        if meta_data.Source:
-            source_tag = meta_data.Source.lower().replace(" ", "_")
-            message.append(
-                formatting.mbold(f"📦 Source #{source_tag}", escape=False),
-            )
+
+    message.append(formatting.mbold(f"📦 NovelAI {mode}", escape=False))
+    if meta_data.Comment.prompt:
+        message.append(code(content=meta_data.Comment.prompt, language="txt"))
+    if meta_data.Comment.negative_prompt:
         message.append(
             code(
-                content=meta_data.Comment.model_dump_json(indent=2),
-                language="json",
+                content=meta_data.Comment.negative_prompt,
+                language="txt",
             )
+        )
+    if meta_data.used_model:
+        model_tag = str(meta_data.used_model.value).replace("-", "_")
+        message.append(
+            formatting.mbold(f"📦 Model #{model_tag}", escape=False),
+        )
+    if meta_data.Source:
+        source_tag = meta_data.Source.lower().replace(" ", "_")
+        message.append(
+            formatting.mbold(f"📦 Source #{source_tag}", escape=False),
         )
     try:
         file.seek(0)
@@ -164,6 +158,12 @@ async def read_novelai(file: BytesIO):
             message.append(formatting.mbold("🧊 Signed by NovelAI", escape=False))
         if has_latent:
             message.append(formatting.mbold("🧊 Find Latent Space", escape=False))
+    message.append(
+        code(
+            content=meta_data.Comment.model_dump_json(indent=2),
+            language="json",
+        )
+    )
     return message
 
 
