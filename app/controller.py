@@ -285,7 +285,7 @@ class BotRunner(object):
             if settings.mode.only_white:
                 if message.chat.id not in settings.mode.white_group:
                     return logger.info(f"White List Out {message.chat.id}")
-            contents = prompt_generator.generate_scene_tags()
+            contents = prompt_generator.generate_scene_composition()
             prompt = [formatting.mbold("🥛 Scene Composition Prompt", escape=False)]
             for content in contents:
                 prompt.append(f"- `{content}`")
