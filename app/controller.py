@@ -99,13 +99,13 @@ async def read_comfyui(file: BytesIO):
         file.seek(0)
         with Image.open(file) as img:
             parameter = img.info.get("prompt")
-            if not parameter:
-                raise Exception("Empty Parameter")
-            decoded_object = json_repair.loads(parameter)
-            return [
-                formatting.mbold("📦 Comfyui", escape=False),
-                code(content=json.dumps(decoded_object, indent=2), language="txt"),
-            ]
+        if not parameter:
+            raise Exception("Empty Parameter")
+        decoded_object = json_repair.loads(parameter)
+        return [
+            formatting.mbold("📦 Comfyui", escape=False),
+            code(content=json.dumps(decoded_object, indent=2), language="txt"),
+        ]
     except Exception as e:
         logger.debug(f"Error {e}")
     return []
