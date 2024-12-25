@@ -138,12 +138,14 @@ async def read_novelai(file: BytesIO):
                 )
             )
         if meta_data.used_model:
+            model_tag = str(meta_data.used_model.value).replace("-", "_")
             message.append(
-                formatting.mbold(f"📦 Model #{meta_data.used_model}", escape=False),
+                formatting.mbold(f"📦 Model #{model_tag}", escape=False),
             )
         if meta_data.Source:
+            source_tag = meta_data.Source.lower().replace(" ", "_")
             message.append(
-                formatting.mbold(f"📦 Source #{meta_data.Source}", escape=False),
+                formatting.mbold(f"📦 Source #{source_tag}", escape=False),
             )
         message.append(
             code(
